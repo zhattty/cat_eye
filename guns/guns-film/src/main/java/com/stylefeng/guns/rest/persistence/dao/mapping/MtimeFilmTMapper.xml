@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeFilmTMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeFilmT">
+        <id column="UUID" property="uuid" />
+        <result column="film_name" property="filmName" />
+        <result column="film_type" property="filmType" />
+        <result column="img_address" property="imgAddress" />
+        <result column="film_score" property="filmScore" />
+        <result column="film_preSaleNum" property="filmPresalenum" />
+        <result column="film_box_office" property="filmBoxOffice" />
+        <result column="film_source" property="filmSource" />
+        <result column="film_cats" property="filmCats" />
+        <result column="film_area" property="filmArea" />
+        <result column="film_date" property="filmDate" />
+        <result column="film_time" property="filmTime" />
+        <result column="film_status" property="filmStatus" />
+    </resultMap>
+    <resultMap id="HotFilmsMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBo">
+        <result column="UUID" property="filmId"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_score" property="filmScore"/>
+        <result column="film_name" property="filmName"/>
+    </resultMap>
+    <select id="listHotFilms" resultMap="HotFilmsMap">
+        select UUID, film_type, img_address, film_score, film_name from mtime_film_t
+        where film_status = 1;
+    </select>
+
+    <resultMap id="SoonFilmsMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBo">
+        <result column="UUID" property="filmId"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_preSaleNum" property="expectNum"/>
+        <result column="film_time" property="showTime"/>
+    </resultMap>
+
+    <select id="listSoonFilms" resultMap="SoonFilmsMap">
+        select UUID, film_type, img_address, film_name, film_preSaleNum, film_time
+        from mtime_film_t
+        where film_status = 2;
+    </select>
+    <resultMap id="BoxRankingMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBo">
+        <result column="UUID" property="filmId"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_box_office" property="boxNum" />
+    </resultMap>
+    <select id="listTop10Box" resultMap="BoxRankingMap">
+        select UUID, img_address, film_name, film_box_office
+        from  mtime_film_t
+        where film_status = 1
+        order by film_box_office
+        limit #{topNum}
+    </select>
+    <resultMap id="ExpectRankingMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBo">
+        <result column="UUID" property="filmId"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_preSaleNum" property="expectNum"/>
+    </resultMap>
+    <select id="listTopExpect" resultMap="ExpectRankingMap">
+        select UUID, img_address, film_name, film_preSaleNum
+        from  mtime_film_t
+        where film_status = 2
+        order by film_preSaleNum
+        limit #{topNum}
+    </select>
+    <resultMap id="Top100Map" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBo">
+        <result column="UUID" property="filmId"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_score" property="score"/>
+    </resultMap>
+    <select id="listTop100Limt" resultMap="Top100Map">
+         select UUID, img_address, film_name, film_score
+        from  mtime_film_t
+        order by film_score
+        limit #{limit}
+    </select>
+</mapper>

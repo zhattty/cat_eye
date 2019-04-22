@@ -13,6 +13,9 @@
         <module>guns-core</module>
         <module>guns-rest</module>
         <module>guns-generator</module>
+        <module>guns-film</module>
+        <module>guns-api</module>
+        <module>guns-gateway</module>
     </modules>
 
     <parent>
