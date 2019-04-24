@@ -3,7 +3,7 @@ package com.stylefeng.guns.rest.persistence.api;
 import com.stylefeng.guns.rest.persistence.model.bo.userBo.UserInfoModel;
 import com.stylefeng.guns.rest.persistence.model.bo.userBo.UserModel;
 
-/**
+/*
  * ClassName: UserAPI
  * Description:
  *
@@ -11,6 +11,7 @@ import com.stylefeng.guns.rest.persistence.model.bo.userBo.UserModel;
  * @version 1.0
  * @date 2019/4/23  11:59
  */
+
 public interface UserAPI {
 
     Integer login(String userName, String password);

@@ -38,4 +38,40 @@
          limit #{limit} offset #{offset}
     </select>
 
+    <select id="queryACinema" resultType="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.CinemaInfoVO">
+       select UUID as cinemaId,img_address as imgUrl,cinema_name as cinemaName,cinema_address as cinemaAdress,cinema_phone as cinemaPhone from mtime_cinema_t where UUID=#{cinemaId}
+   </select>
+
+    <resultMap id="findfiled" type="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.FilmInfoVO">
+        <id column="mid" property="filmId" />
+        <result column="film_name" property="filmName" />
+        <result column="film_length" property="filmLength" />
+        <result column="film_cats" property="filmCats" />
+        <result column="film_language" property="filmType" />
+        <result column="actors" property="actors" />
+        <result column="img_address" property="imgAddress" />
+        <collection property="filmFields" ofType="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.FilmFieldVO">
+            <result column="did" property="fieldId" />
+            <result column="film_language" property="language" />
+            <result column="begin_time" property="beginTime" />
+            <result column="end_time" property="endTime" />
+            <result column="hall_name" property="hallName" />
+            <result column="price" property="price" />
+        </collection>
+
+    </resultMap>
+    <select id="queryCinemaField" resultMap="findfiled">
+        select m.film_id as mid,film_name,film_length,film_cats,actors,film_language,img_address,d.UUID as did,begin_time,end_time,hall_name,price from mtime_hall_film_info_t m
+        left join mtime_field_t d on m.film_id=d.film_id where cinema_id=#{cinemaId}
+    </select>
+
+    <select id="queryFilmInfo" resultType="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.FilmInfoVO">
+       select m.film_id as filmId,film_name as filmName,film_length as filmLength,film_cats as filmCats,actors,film_language as filmType,img_address as imgAddress,d.UUID as did,begin_time,end_time,hall_name,price from mtime_hall_film_info_t m
+        left join mtime_field_t d on m.film_id=d.film_id where cinema_id=#{cinemaId} and d.UUID=#{fieldId}
+    </select>
+    <select id="queryHallInfo" resultType="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.HallInfoVO">
+        select hall_id as hallFieldId,hall_name as hallName,price,seat_address as seatFile from mtime_field_t
+        left join  mtime_hall_dict_t d on  hall_id=d.UUID where d.UUID=#{fieldId}
+    </select>
+
 </mapper>
