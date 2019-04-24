@@ -58,14 +58,14 @@ public class EntityGenerator {
         StrategyConfig strategy = new StrategyConfig();
         //strategy.setTablePrefix(new String[]{"_"});// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[]{"mtime_actor_t",
-                                         "mtime_banner_t",
-                                         "mtime_cat_dict_t",
-                                         "mtime_film_info_t",
-                                         "mtime_film_t",
-                                         "mtime_source_dict_t",
-                                         "mtime_year_dict_t"});// 表名
-
+        strategy.setInclude(new String[]{"mtime_film_actor_t"});// 表名
+//        "mtime_actor_t",
+//                "mtime_banner_t",
+//                "mtime_cat_dict_t",
+//                "mtime_film_info_t",
+//                "mtime_film_t",
+//                "mtime_source_dict_t",
+//                "mtime_year_dict_t"
         mpg.setStrategy(strategy);
 
         // 包配置

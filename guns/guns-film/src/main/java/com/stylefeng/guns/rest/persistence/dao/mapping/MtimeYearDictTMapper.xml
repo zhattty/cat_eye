@@ -8,4 +8,18 @@
         <result column="show_name" property="showName" />
     </resultMap>
 
+    <resultMap id="YearBoResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.YearBo">
+        <id column="UUID" property="yearId" />
+        <result column="show_name" property="yearName" />
+    </resultMap>
+
+    <select id="listAllYear" resultMap="YearBoResultMap">
+        select UUID, show_name from mtime_year_dict_t
+    </select>
+
+    <select id="selectYearById" resultMap="YearBoResultMap">
+        select UUID, show_name from mtime_year_dict_t where UUID = #{id}
+    </select>
+
+
 </mapper>

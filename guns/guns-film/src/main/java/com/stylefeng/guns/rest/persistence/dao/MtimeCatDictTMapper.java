@@ -2,6 +2,10 @@ package com.stylefeng.guns.rest.persistence.dao;
 
 import com.stylefeng.guns.rest.persistence.model.MtimeCatDictT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.stylefeng.guns.rest.persistence.model.bo.filmBo.CatBo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,9 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MtimeCatDictTMapper extends BaseMapper<MtimeCatDictT> {
 
+    List<CatBo> listAllCat();
+
+    CatBo selectCatById();
+
+    String[] listCatNameByIds(@Param("ids") String[] catIds);
 }

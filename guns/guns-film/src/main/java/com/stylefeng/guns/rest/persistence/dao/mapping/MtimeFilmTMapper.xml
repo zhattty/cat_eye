@@ -77,9 +77,76 @@
         <result column="film_score" property="score"/>
     </resultMap>
     <select id="listTop100Limt" resultMap="Top100Map">
-         select UUID, img_address, film_name, film_score
+        select UUID, img_address, film_name, film_score
         from  mtime_film_t
         order by film_score
         limit #{limit}
+    </select>
+
+    <select id="listPageFilmsWithConditions" resultMap="HotFilmsMap">
+          select f.UUID, film_type, img_address, film_score, film_name
+          from mtime_film_t as f
+          <where>
+              film_status = #{conditions.showType}
+              <if test="conditions.catId != 99">
+                  and film_cats like concat('%#', #{conditions.catId}, '#%')
+              </if>
+              <if test="conditions.yearId != 99">
+                  and (film_time
+                  between (select `begin` from mtime_year_dict_t as y where y.UUID = #{conditions.yearId})
+                  and (select `end` from mtime_year_dict_t as y where y.UUID = #{conditions.yearId}))
+              </if>
+              <if test="conditions.sourceId != 99">
+                  and film_source = #{conditions.sourceId}
+              </if>
+              order by
+              <if test="conditions.sortId == 1">
+                  film_box_office desc
+              </if>
+              <if test="conditions.sortId == 2">
+                  film_time desc
+              </if>
+              <if test="conditions.sortId == 3">
+                  film_score desc
+              </if>
+          </where>
+    </select>
+    <!--<result column="film_total_box" property="totalBox"/>-->
+
+    <resultMap id="FilmDetailResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmDetailBo">
+        <result column="film_name" property="filmName"/>
+        <result column="film_en_name" property="filmEnName"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_score" property="score"/>
+        <result column="film_score_num" property="scoreNum"/>
+
+        <result column="film_cats" property="filmCats"/>
+        <result column="film_area" property="filmArea"/>
+        <result column="film_time" property="filmTime"/>
+        <result column="film_source" property="filmSource"/>
+        <result column="film_imgs" property="filmImgs"/>
+        <result column="UUID" property="filmId"/>
+        <result column="director_id" property="directId"/>
+        <result column="film_length" property="filmLength"/>
+
+        <association  property="info04" javaType="com.stylefeng.guns.rest.persistence.model.bo.filmBo.InfoBo">
+            <result column="biography" property="biography"/>
+        </association>
+    </resultMap>
+
+    <select id="getFilmDetailBo" resultMap="FilmDetailResultMap">
+        select film_name, film_en_name, img_address, f.film_score, film_score_num, film_length,
+        film_cats, film_area, film_time, film_source, film_imgs, biography, f.UUID , director_id
+        from mtime_film_t as f
+        left join mtime_film_info_t as fd on f.UUID = fd.UUID
+        <where>
+            f.UUID =
+            <if test="searchType == 0">
+                #{searchParam}
+            </if>
+            <if test="searchType == 1">
+                (select UUID from mtime_film_t where film_name = #{searchParam})
+            </if>
+        </where>
     </select>
 </mapper>

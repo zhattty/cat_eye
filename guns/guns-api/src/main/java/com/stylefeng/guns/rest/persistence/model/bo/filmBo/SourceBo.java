@@ -1,6 +1,5 @@
 package com.stylefeng.guns.rest.persistence.model.bo.filmBo;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,19 +8,15 @@ import java.io.Serializable;
 
 /**
  * Created by ZhangYao
- * Date 2019/4/21 Time 20:43
+ * Date 2019/4/22 Time 22:00
  */
 @Getter
 @Setter
 @ToString
-public class BannerBo implements Serializable {
-    /**
-     * 对应banner表里的uuid
-     */
-    int bannerId;
+public class SourceBo implements Serializable {
+    private int sourceId;
 
-    String bannerAddress;
+    private String sourceName;
 
-    String bannerUrl;
-
+    private boolean isActive;
 }

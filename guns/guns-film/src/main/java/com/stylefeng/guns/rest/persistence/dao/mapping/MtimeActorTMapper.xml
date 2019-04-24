@@ -9,4 +9,12 @@
         <result column="actor_img" property="actorImg" />
     </resultMap>
 
+    <resultMap id="DirectorBoMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.DirectorBo">
+        <result column="actor_name" property="directorName" />
+        <result column="actor_img" property="imgAddress" />
+    </resultMap>
+
+    <select id="selectDirectorById" resultMap="DirectorBoMap">
+        select actor_name, actor_img from mtime_actor_t where UUID = #{id}
+    </select>
 </mapper>

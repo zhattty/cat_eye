@@ -2,6 +2,9 @@ package com.stylefeng.guns.rest.persistence.dao;
 
 import com.stylefeng.guns.rest.persistence.model.MtimeYearDictT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.stylefeng.guns.rest.persistence.model.bo.filmBo.YearBo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MtimeYearDictTMapper extends BaseMapper<MtimeYearDictT> {
 
+    List<YearBo> listAllYear();
+
+    YearBo selectYearById(int yearId);
 }

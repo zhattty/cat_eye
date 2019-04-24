@@ -1,7 +1,6 @@
 package com.stylefeng.guns.rest.persistence.service;
 
-import com.stylefeng.guns.rest.persistence.model.bo.filmBo.BannerBo;
-import com.stylefeng.guns.rest.persistence.model.bo.filmBo.FilmBo;
+import com.stylefeng.guns.rest.persistence.model.bo.filmBo.*;
 
 import java.util.List;
 
@@ -21,4 +20,16 @@ public interface FilmService {
     List<FilmBo> listTopExpect(int i);
 
     List<FilmBo> listTop100Limit(int i);
+
+    List<SourceBo> listAllSource();
+
+    SourceBo selectSourceById(int sourceId);
+
+    List<CatBo> listAllCat();
+
+    CatBo selectCatById(int catId);
+
+    List<YearBo> listAllYear();
+
+    YearBo selectYearById(int yearId);
 }

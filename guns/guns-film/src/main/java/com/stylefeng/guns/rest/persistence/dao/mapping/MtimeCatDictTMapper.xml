@@ -8,4 +8,24 @@
         <result column="show_name" property="showName" />
     </resultMap>
 
+    <resultMap id="CatBoResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.CatBo">
+        <id column="UUID" property="catId" />
+        <result column="show_name" property="catName" />
+    </resultMap>
+
+    <select id="listAllCat" resultMap="CatBoResultMap">
+        select UUID, show_name from mtime_cat_dict_t
+    </select>
+
+    <select id="selectCatById" resultMap="CatBoResultMap">
+        select UUID, show_name from mtime_cat_dict_t where UUID = #{id}
+    </select>
+
+    <select id="listCatNameByIds" resultType="string">
+        select show_name from mtime_cat_dict_t where UUID in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>

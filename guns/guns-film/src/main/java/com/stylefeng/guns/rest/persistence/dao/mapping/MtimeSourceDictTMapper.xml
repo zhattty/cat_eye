@@ -8,4 +8,24 @@
         <result column="show_name" property="showName" />
     </resultMap>
 
+    <resultMap id="SourceBoResultMap" type="com.stylefeng.guns.rest.persistence.model.bo.filmBo.SourceBo">
+        <result column="UUID" property="sourceId"/>
+        <result column="show_name" property="sourceName"/>
+    </resultMap>
+
+    <select id="listAllSource" resultMap="SourceBoResultMap">
+        select UUID, show_name from mtime_source_dict_t
+    </select>
+
+    <select id="selectSourceById" resultMap="SourceBoResultMap">
+         select UUID, show_name from mtime_source_dict_t where UUID = #{id}
+    </select>
+
+    <select id="listSourceNames" resultType="string">
+        select show_name from mtime_source_dict_t where UUID in
+        <foreach collection="ids" item="id" close=")" open="(" separator=",">
+            #{id}
+        </foreach>
+     </select>
+
 </mapper>
