@@ -6,34 +6,36 @@
     <groupId>com.stylefeng.guns</groupId>
     <artifactId>guns-api</artifactId>
     <version>0.0.1</version>
-    <packaging>jar</packaging>
-
-    <name>guns-api</name>
-    <description>guns api存放公共接口和Bean</description>
     <dependencies>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus</artifactId>
-            <version>2.3</version>
+            <artifactId>mybatis-plus-support</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>6.0.16.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.6</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
+    <packaging>jar</packaging>
+
+    <name>guns-api</name>
+    <description>guns api存放公共接口和Bean</description>
+
     <parent>
         <groupId>com.stylefeng</groupId>
         <artifactId>guns-parent</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
 
 </project>

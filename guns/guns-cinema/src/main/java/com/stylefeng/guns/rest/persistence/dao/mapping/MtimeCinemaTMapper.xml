@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeCinemaTMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeCinemaT">
+        <id column="UUID" property="uuid" />
+        <result column="cinema_name" property="cinemaName" />
+        <result column="cinema_phone" property="cinemaPhone" />
+        <result column="brand_id" property="brandId" />
+        <result column="area_id" property="areaId" />
+        <result column="hall_ids" property="hallIds" />
+        <result column="img_address" property="imgAddress" />
+        <result column="cinema_address" property="cinemaAddress" />
+        <result column="minimum_price" property="minimumPrice" />
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.CinemaVO">
+        <id column="UUID" property="id" />
+        <result column="cinema_name" property="cinemaName" />
+        <result column="cinema_address" property="address" />
+        <result column="minimum_price" property="minimumPrice" />
+    </resultMap>
+
+    <select id="queryCinemasByPage" resultMap="BaseResultMap2">
+        select UUID,cinema_name,cinema_address,minimum_price
+        from mtime_cinema_t
+        <where>
+            <if test="cinema.brandId != 99">
+                brand_id=#{cinema.brandId}
+            </if>
+            <if test="cinema.districtId != 99">
+                and area_id=#{cinema.districtId}
+            </if>
+            <if test="cinema.hallType != '99'">
+                and hall_ids LIKE '%'||#{cinema.hallType}||'%'
+            </if>
+        </where>
+         limit #{limit} offset #{offset}
+    </select>
+
+</mapper>

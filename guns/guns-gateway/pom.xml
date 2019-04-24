@@ -47,6 +47,7 @@
             <artifactId>zkclient</artifactId>
             <version>0.10</version>
         </dependency>
+
         <!--api-->
         <dependency>
             <groupId>com.stylefeng.guns</groupId>
@@ -58,6 +59,12 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>6.0.16.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
         </dependency>
     </dependencies>
 
