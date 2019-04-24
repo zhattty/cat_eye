@@ -6,6 +6,20 @@
     <groupId>com.stylefeng.guns</groupId>
     <artifactId>guns-api</artifactId>
     <version>0.0.1</version>
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-support</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     <packaging>jar</packaging>
 
     <name>guns-api</name>

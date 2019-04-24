@@ -20,6 +20,14 @@ public class FilmIndexQueryVo {
 
    private Map<String, Object>  data;
 
+    public FilmIndexQueryVo() {
+    }
+
+    public FilmIndexQueryVo(int status, String msg) {
+        this.status = status;
+        this.msg = msg;
+    }
+
     public int getStatus() {
         return status;
     }
