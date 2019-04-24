@@ -9,4 +9,18 @@
         <result column="seat_address" property="seatAddress" />
     </resultMap>
 
+    <resultMap id="BaseResultMap2" type="com.stylefeng.guns.rest.persistence.model.MtimeHallDictT">
+        <id column="UUID" property="halltypeId" />
+        <result column="show_name" property="halltypeName" />
+    </resultMap>
+
+    <select id="selectByHallType" resultMap="BaseResultMap2">
+        select UUID,show_name from mtime_hall_dict_t
+        <where>
+            <if test="hallType!=99">
+                UUID=#{hallType}
+            </if>
+        </where>
+    </select>
+
 </mapper>

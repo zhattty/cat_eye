@@ -7,5 +7,18 @@
         <id column="UUID" property="uuid" />
         <result column="show_name" property="showName" />
     </resultMap>
+    <resultMap id="BaseResultMap2" type="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.BrandVO">
+        <id column="UUID" property="brandId" />
+        <result column="show_name" property="brandName" />
+    </resultMap>
 
+
+    <select id="selectByBrandId" resultMap="BaseResultMap2">
+        select UUID,show_name from mtime_brand_dict_t
+        <where>
+            <if test="brandId != 99">
+                UUID=#{brandId}
+            </if>
+        </where>
+    </select>
 </mapper>

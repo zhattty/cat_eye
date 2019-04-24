@@ -2,6 +2,10 @@ package com.stylefeng.guns.rest.persistence.dao;
 
 import com.stylefeng.guns.rest.persistence.model.MtimeHallDictT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.HallTypeVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MtimeHallDictTMapper extends BaseMapper<MtimeHallDictT> {
 
+    List<HallTypeVO> selectByHallType(@Param("hallType") int hallType);
 }

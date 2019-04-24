@@ -8,4 +8,17 @@
         <result column="show_name" property="showName" />
     </resultMap>
 
+    <resultMap id="BaseResultMap2" type="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.AreaVO">
+        <id column="UUID" property="areaId" />
+        <result column="show_name" property="areaName" />
+    </resultMap>
+
+    <select id="selectByAreaId" resultMap="BaseResultMap2">
+        select UUID,area_id from mtime_area_dict_t
+        <where>
+            <if test="areaId != 99">
+                UUID=#{areaId}
+            </if>
+        </where>
+    </select>
 </mapper>

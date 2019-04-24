@@ -48,17 +48,22 @@ public class CinemaServiceImpl implements CinemaApi {
     @Override
     public List<BrandVO> getBrands(int brandId) {
         List<BrandVO> brandVOList = brandDictTMapper.selectByBrandId(brandId);
-        return null;
+        brandVOList.get(brandVOList.size()-1).setActive(true);
+        return brandVOList;
     }
 
     @Override
     public List<AreaVO> getAreas(int areaId) {
-        return null;
+        List<AreaVO> areaVOS = areaDictTMapper.selectByAreaId(areaId);
+        areaVOS.get(areaVOS.size()-1).setActive(true);
+        return areaVOS;
     }
 
     @Override
     public List<HallTypeVO> getHallTypes(String  hallType) {
-        return null;
+        List<HallTypeVO> hallTypeVOList = hallDictTMapper.selectByHallType(Integer.valueOf(hallType));
+        hallTypeVOList.get(hallTypeVOList.size()-1).setActive(true);
+        return hallTypeVOList;
     }
 
     @Override
