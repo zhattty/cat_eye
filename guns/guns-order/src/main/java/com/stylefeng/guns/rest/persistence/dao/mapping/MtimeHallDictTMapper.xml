@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.rest.persistence.dao.MtimeHallDictTMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.persistence.model.MtimeHallDictT">
+        <id column="UUID" property="uuid" />
+        <result column="show_name" property="showName" />
+        <result column="seat_address" property="seatAddress" />
+    </resultMap>
+
+    <select id="selectHallSeatAddressByFieldId" resultType="string">
+        select seat_address from mtime_hall_dict_t
+        where UUID =
+        (select hall_id from mtime_field_t where UUID = #{id})
+    </select>
+</mapper>

@@ -207,10 +207,11 @@ public class FilmController {
             // info 1 2 3 4 和 外层的 imgs
             FilmDetailBo detailBo = filmApi.getFilmDetailBo(searchType, searchParam);
             FilmDetailVo detailVo = buildFromDetailBo(detailBo);
+
             queryVo.setData(detailVo);
-            String filmImgs = detailBo.getFilmImgs();
-            Map<String , String> imgs = transferImgs(filmImgs);
-            queryVo.setImgs(imgs);
+//            String filmImgs = detailBo.getFilmImgs();
+//            Map<String , String> imgs = transferImgs(filmImgs);
+//            queryVo.setImgs(imgs);
             queryVo.setFilmId(detailBo.getFilmId());
         }catch (Exception e){
             e.printStackTrace();
@@ -280,6 +281,9 @@ public class FilmController {
         actorsBo.setDirector(director);
         actorsBo.setActors(actors);
         info04.setActors(actorsBo);
+        Map<String, String> map = transferImgs(bo.getFilmImgs());
+        info04.setImgVo(map);
+        info04.setFilmId(bo.getFilmId());
         vo.setInfo04(info04);
         return vo;
     }

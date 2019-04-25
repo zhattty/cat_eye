@@ -14,7 +14,7 @@
     </resultMap>
 
     <select id="selectByAreaId" resultMap="BaseResultMap2">
-        select UUID,area_id from mtime_area_dict_t
+        select UUID,show_name from mtime_area_dict_t
         <where>
             <if test="areaId != 99">
                 UUID=#{areaId}

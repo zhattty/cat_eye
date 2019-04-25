@@ -1,14 +1,18 @@
 package com.stylefeng.guns.rest.persistence.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.persistence.api.CinemaServiceAPI;
 import com.stylefeng.guns.rest.persistence.api.cinemaApi.CinemaApi;
+import com.stylefeng.guns.rest.persistence.api.orderApi.OrderApi;
 import com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.CinemaVO;
 import com.stylefeng.guns.rest.persistence.model.requestVo.cinemaRequestVo.GetCinemasRequestVo;
 import com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.*;
+import com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.HallInfoVO;
 import com.stylefeng.guns.rest.persistence.model.responseVo.filmResponsevo.FilmIndexQueryVo;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +27,12 @@ public class CinemaController {
 
     @Reference
     CinemaApi cinemaService;
+
+    @Reference
+    CinemaServiceAPI cinemaServiceAPI;
+
+    @Reference
+    OrderApi orderApi;
 
     @RequestMapping(value = "getCinemas",method = RequestMethod.GET)
     public Object getCinemas(Model model,
@@ -48,8 +58,8 @@ public class CinemaController {
             getCinemasResponseVo.setNowPage(nowPage);
             getCinemasResponseVo.setTotalPage(pageSize);
             getCinemasResponseVo.setStatus(0);
-            map.put("data",list);
-            getCinemasResponseVo.setMap(map);
+            map.put("cinemas",list);
+            getCinemasResponseVo.setData(map);
             return list==null?new FilmIndexQueryVo(1,"影院信息查询失败"):getCinemasResponseVo;
 
         }catch (Exception e){
@@ -64,53 +74,33 @@ public class CinemaController {
 
 
     @RequestMapping("getFields")
-    public Map getFields(@RequestParam int  cinemaId){
-
+    public HashMap queryCinemaDetail(@RequestParam("cinemaId") int cinemaId){
         try {
-            CinemaInfoVO cinemaInfoVO = cinemaService.getCinemaInfoByCinemaId(cinemaId);
-
-            // 第二层map 用来封装cinemaInfo 和 filmList
-            Map<String, Object> map = new HashMap<>();
-
-            if (cinemaInfoVO == null) {
-                // 数据库中没有找到相关的影院信息，返回
-                map.put("status", 1);
-                map.put("msg", "影院信息查询失败");
-                return map;
-            }
-
-            List<FilmInfoVO> filmInfoVOList = cinemaService.getFilmInfoByCinemaId(cinemaId);
-
-            // 遍历FilmInfoVO数组，根据filmInfoVO的filmId查找filmField
-            for (FilmInfoVO filmInfoVO : filmInfoVOList) {
-
-                List<FilmIFieldVO> fieldVO = cinemaService.getFilmInfoFieldId(Integer.valueOf(filmInfoVO.getFilmId()));
-                if (fieldVO != null) {
-                    filmInfoVO.setList(fieldVO);
-                }
-            }
-
-            // 最底层的map 用来封装FilmFieldVO
+            com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.CinemaInfoVO cinemaInfo = cinemaServiceAPI.getCinemaInfoVoById(cinemaId);
+            List<com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.FilmInfoVO> filmInfoList = cinemaServiceAPI.getFilmInfoVobyId(cinemaId);
             HashMap<String, Object> map1 = new HashMap<>();
-            map1.put("filmInfo", filmInfoVOList);
-
-
-            // 找到信息，加进map中
-            map.put("cinemaInfo", cinemaInfoVO);
-            map.put("filmList", map1);
-
-            // 第三层map用来封装返回的jason报文
             HashMap<String, Object> map2 = new HashMap<>();
-            map2.put("status", 0);
-            map2.put("imgPre", "http://img.meetingshop.cn/");
-            map2.put("data", map1);
-            return map2;
+
+            if (cinemaInfo != null) {
+                map2.put("cinemaInfo", cinemaInfo);
+                map2.put("filmList",filmInfoList);
+                map1.put("status", 0);
+                map1.put("imgPre", "http://img.meetingshop.cn/");
+                map1.put("data", map2);
+                return map1;
+            } else {
+                map1.put("status", 1);
+                map1.put("msg", "影院信息查询失败");
+                return map1;
+            }
         }catch (Exception e){
-            Map<String, Object> map = new HashMap<>();
+            HashMap<String, Object> map = new HashMap<>(2);
             map.put("status",999);
             map.put("msg","发生未知错误请联系管理员");
             return map;
         }
+
+
     }
 
     @RequestMapping(value = "getCondition", method = RequestMethod.GET)
@@ -135,6 +125,7 @@ public class CinemaController {
             map1.put("data", map2);
             return map1;
         }catch (Exception e){
+            e.printStackTrace();
             Map<String, Object> map = new HashMap<>(2);
             map.put("status",999);
             map.put("msg","发生未知错误请联系管理员");
@@ -145,52 +136,38 @@ public class CinemaController {
 
 
     @RequestMapping(value = "getFieldInfo",method = RequestMethod.POST)
-    public  Map getFieldInfo(@RequestParam("cinemaId") int cinemaId,@RequestParam("fieldId") int fieldId){
-
+    public HashMap queryFilmFieldDetail(@RequestParam("cinemaId") int cinemaId,@RequestParam("fieldId") int fieldId){
         try {
-            HashMap<String, Object> map = new HashMap<>();
+            com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.FilmInfoVO filmInfo = cinemaServiceAPI.queryFilmInfo(cinemaId, fieldId);
+            com.stylefeng.guns.rest.persistence.model.responseVo.cinemaVo.CinemaInfoVO cinemaInfo = cinemaServiceAPI.getCinemaInfoVoById(cinemaId);
+            HallInfoVO hallInfo = cinemaServiceAPI.queryHallInfo(fieldId);
+            String soldSeats = orderApi.getSoldSeatsByFieldId(fieldId);
+            hallInfo.setSoldSeats(soldSeats);
+            HashMap<String, Object> map1 = new HashMap();
+            HashMap<String, Object> map2 = new HashMap();
+            if (filmInfo != null && cinemaInfo != null && hallInfo != null) {
 
-            // 根据cinemaId来查询所需要的电影院
-            List<CinemaInfoVO> cinemaVOList = cinemaService.getCinemaByCinemaId(cinemaId);
-            if(cinemaVOList==null){
-                map.put("status",1);
-                map.put("msg","影院信息查询失败");
-                return map;
+                map2.put("filmInfo", filmInfo);
+                map2.put("cinemaInfo", cinemaInfo);
+                map2.put("hallInfo", hallInfo);
+
+                map1.put("status", 0);
+                map1.put("imgPre", "http://img.meetingshop.cn/");
+                map1.put("data", map2);
+                return map1;
+
+            } else {
+                map1.put("status", 1);
+                map1.put("msg", "影院信息查询失败");
+                return map1;
             }
-
-            // 根据cinemaId来查询电影信息
-            List<FilmInfoVO> filmInfo = cinemaService.getFilmInfoByCinemaId(cinemaId);
-
-            if(filmInfo == null){
-                map.put("status",1);
-                map.put("msg","影院信息查询失败");
-                return map;
-            }
-
-            // 根据fieldId来查询放映厅
-            List<HallInfoVO> hallInfo= cinemaService.getHallByFieldId(fieldId);
-            if(hallInfo == null){
-                map.put("status",1);
-                map.put("msg","影院信息查询失败");
-                return map;
-            }
-
-            map.put("filmInfo",filmInfo);
-            map.put("cinemaInfo", cinemaVOList);
-            map.put("hallInfo", hallInfo);
-
-            HashMap<String, Object> map1 = new HashMap<>();
-            map1.put("status",0);
-            map1.put("imgPre","http://img.meetingshop.cn/");
-            map1.put("data",map);
-
-            return map1;
         }catch (Exception e){
-            Map<String, Object> map = new HashMap<>(2);
-            map.put("status",999);
-            map.put("msg","发生未知错误请联系管理员");
-            return map;
+            HashMap<String, Object> map3 = new HashMap<>(2);
+            map3.put("status",999);
+            map3.put("msg","发生未知错误请联系管理员");
+            return map3;
         }
+
 
     }
 

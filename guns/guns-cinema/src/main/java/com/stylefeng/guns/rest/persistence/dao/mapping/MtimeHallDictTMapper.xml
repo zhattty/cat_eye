@@ -9,7 +9,7 @@
         <result column="seat_address" property="seatAddress" />
     </resultMap>
 
-    <resultMap id="BaseResultMap2" type="com.stylefeng.guns.rest.persistence.model.MtimeHallDictT">
+    <resultMap id="BaseResultMap2" type="com.stylefeng.guns.rest.persistence.model.responseVo.cinemaResponseVo.HallTypeVO">
         <id column="UUID" property="halltypeId" />
         <result column="show_name" property="halltypeName" />
     </resultMap>
