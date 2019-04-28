@@ -52,4 +52,14 @@
         where order_user = #{id}
         order by order_time desc limit 1;
     </select>
+
+    <select id="getTotalPriceByOrderId" resultType="_double">
+        select order_price from mtime_order_t where UUID = #{orderId}
+    </select>
+
+    <update id="updateOrderStatusByOrderid" >
+        update mtime_order_t set order_status = #{status} where UUID = #{orderId}
+    </update>
+
+
 </mapper>

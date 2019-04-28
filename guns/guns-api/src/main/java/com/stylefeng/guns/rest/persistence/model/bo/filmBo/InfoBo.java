@@ -18,5 +18,5 @@ public class InfoBo implements Serializable {
     String biography;
     ActorsBo actors;
     int filmId;
-    Map<String, String> imgVo;
+    Map<String, String> imgVO;
 }

@@ -23,4 +23,8 @@ public interface MtimeOrderTMapper extends BaseMapper<MtimeOrderT> {
     List<OrderVo> getOrderByUserId(Page<OrderVo> page, @Param("id") Integer userId);
 
     OrderVo selectOrderVoByUserId(Integer userId);
+
+    double getTotalPriceByOrderId(@Param("orderId") String orderId);
+
+    Integer updateOrderStatusByOrderid(@Param("orderId") String orderId,@Param("status") int status);
 }

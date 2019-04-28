@@ -220,7 +220,7 @@ public class FilmController {
             return queryVo;
         }
         queryVo.setStatus(0);
-        queryVo.setImgPre("http://img.meetingshop.cn/");
+        queryVo.setImgPre("https://cat-eye.oss-cn-shenzhen.aliyuncs.com/");
         return queryVo;
     }
 
@@ -282,7 +282,7 @@ public class FilmController {
         actorsBo.setActors(actors);
         info04.setActors(actorsBo);
         Map<String, String> map = transferImgs(bo.getFilmImgs());
-        info04.setImgVo(map);
+        info04.setImgVO(map);
         info04.setFilmId(bo.getFilmId());
         vo.setInfo04(info04);
         return vo;

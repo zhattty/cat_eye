@@ -1,12 +1,11 @@
 package com.stylefeng.guns.rest.persistence.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alipay.demo.trade.Main;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.rest.CurrentUser;
 import com.stylefeng.guns.rest.persistence.api.orderApi.OrderApi;
-import com.stylefeng.guns.rest.persistence.model.responseVo.orderResVo.BuyTicketsResVo;
-import com.stylefeng.guns.rest.persistence.model.responseVo.orderResVo.OrderInfoVo;
-import com.stylefeng.guns.rest.persistence.model.responseVo.orderResVo.OrderVo;
+import com.stylefeng.guns.rest.persistence.model.responseVo.orderResVo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,5 +79,48 @@ public class OrderController {
         }
         orderInfoVo.setStatus(0);
         return orderInfoVo;
+    }
+
+
+    @RequestMapping(value = "/getPayInfo", method = RequestMethod.POST)
+    public PayInfoVo getPayInfo(@RequestParam("orderId") String orderId){
+        PayInfoVo vo = null;
+        try {
+            double totalPriceByOrderId = orderApi.getTotalPriceByOrderId(orderId);
+            Main main = new Main();
+            String qrPath = main.test_trade_precreate(orderId, totalPriceByOrderId);
+            if ("".equals(qrPath)) {
+                return PayInfoVo.fail(1,"创建payInfo失败");
+            }
+
+            vo = PayInfoVo.ok("http://localhost/aliPayQRCode/", orderId, qrPath);
+        }catch (Exception e){
+            e.printStackTrace();
+            return PayInfoVo.fail(999,"系统错误请联系管理员");
+        }
+        return vo;
+    }
+
+    @RequestMapping(value = "/getPayResult", method = RequestMethod.POST)
+    public PayResultVo getPayResult(@RequestParam("orderId")String orderId,
+                                    @RequestParam(name = "tryNums", defaultValue = "1") Integer tryNums){
+        if (tryNums>3){
+            return PayResultVo.fail(1,"订单支付失败，请稍后重试");
+        }
+        PayResultVo vo = null;
+        try {
+            Main main = new Main();
+            Boolean isTradeSuccess = main.test_trade_query(orderId);
+            if (isTradeSuccess){
+                vo = PayResultVo.ok(orderId,1,"支付成功");
+                Integer result = orderApi.updateOrderStatusByOrderId( orderId, 1);
+            }else {
+                vo = PayResultVo.ok(orderId,3,"支付未成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return PayResultVo.fail(999, "系统出错请联系管理员");
+        }
+        return vo;
     }
 }

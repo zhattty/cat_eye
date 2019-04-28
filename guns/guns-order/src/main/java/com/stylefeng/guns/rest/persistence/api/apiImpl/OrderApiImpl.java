@@ -119,4 +119,15 @@ public class OrderApiImpl implements OrderApi{
         }
         return false;
     }
+
+    @Override
+    public double getTotalPriceByOrderId(String orderId) {
+        return mtimeOrderTMapper.getTotalPriceByOrderId(orderId);
+    }
+
+    @Override
+    public Integer updateOrderStatusByOrderId(String orderId, int status) {
+        return mtimeOrderTMapper.updateOrderStatusByOrderid(orderId, status);
+    }
+
 }

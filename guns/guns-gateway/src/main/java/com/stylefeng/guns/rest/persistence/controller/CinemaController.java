@@ -58,8 +58,7 @@ public class CinemaController {
             getCinemasResponseVo.setNowPage(nowPage);
             getCinemasResponseVo.setTotalPage(pageSize);
             getCinemasResponseVo.setStatus(0);
-            map.put("cinemas",list);
-            getCinemasResponseVo.setData(map);
+            getCinemasResponseVo.setData(list);
             return list==null?new FilmIndexQueryVo(1,"影院信息查询失败"):getCinemasResponseVo;
 
         }catch (Exception e){

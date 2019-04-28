@@ -21,7 +21,7 @@ public class GetCinemasResponseVo implements Serializable {
     private int status;
     private int nowPage;
     private int totalPage;
-    private Map<String,Object> data;
+    private List<CinemaVO> data;
 
 
 }

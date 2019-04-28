@@ -25,4 +25,8 @@ public interface OrderApi {
 
     // 验证售出的票是否为真
     boolean isTrueSeats(String fieldId, String seats) throws IOException;
+
+    double getTotalPriceByOrderId(String orderId);
+
+    Integer updateOrderStatusByOrderId(String orderId, int i);
 }
