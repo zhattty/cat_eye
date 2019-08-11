@@ -149,7 +149,7 @@ public class CinemaController {
                 map2.put("filmInfo", filmInfo);
                 map2.put("cinemaInfo", cinemaInfo);
                 map2.put("hallInfo", hallInfo);
-                map2.put("hallInfo1", hallInfo);
+                map2.put("hallInfo123", hallInfo);
                 map2.put("soldSeats1", soldSeats);
 
 
